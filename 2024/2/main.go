@@ -81,6 +81,15 @@ func part2(data []string) int {
 	}
 	return safeReports
 }
+
+func part1_improved(data []string) int {
+
+}
+
+func part2_improved(data []string) int {
+
+}
+
 func main() {
 	data, err := os.ReadFile("input.txt")
 	if err != nil {
