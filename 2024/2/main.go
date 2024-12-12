@@ -49,13 +49,6 @@ func safeReport(report []string) bool {
 	return true
 }
 
-func delete_at_index(a []string, i int) []string {
-	copy(a[i:], a[i+1:]) // Shift a[i+1:] left one index.
-	a[len(a)-1] = ""     // Erase last element (write zero value).
-	a = a[:len(a)-1]     // Truncate slice.
-	return a
-}
-
 func part1(data []string) int {
 	safeReports := 0
 	for _, row := range data {
@@ -67,34 +60,29 @@ func part1(data []string) int {
 	return safeReports
 }
 
+func copy_except_index(a []string, i int) []string {
+	copy_report := make([]string, len(a)-1)
+	copy(copy_report, a[:i])
+	copy(copy_report[i:], a[i+1:])
+	return copy_report
+}
+
 func part2(data []string) int {
 	safeReports := 0
 	for _, row := range data {
 		report := strings.Fields(row)
-		fmt.Println(report)
-		for field, _ := range report {
-			if field > 0 {
-				r := []string{}
-				copy(r[:], report)
-				cReport := delete_at_index(r, field)
-				fmt.Println(cReport)
-				
+		for index, _ := range report {
+			copy_report := copy_except_index(report, index)
+			if safeReport(copy_report) {
+				safeReports++
+				break
 			}
-
 		}
-
-		break
-		// check := safeReport(row, 1)
-		// fmt.Printf("Report %v, [%s] was %v\n", i ,row, check)
-		// if check {
-		// 	safeReports++
-		// }
 	}
 	return safeReports
 }
-
 func main() {
-	data, err := os.ReadFile("test.txt")
+	data, err := os.ReadFile("input.txt")
 	if err != nil {
 		fmt.Println("no file!")
 		return
